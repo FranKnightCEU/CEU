@@ -1,0 +1,8 @@
+{
+  "leidos": 601200,
+  "duplicados": 1200,
+  "rechazados": 3600,
+  "validos": 596400,
+  "porcentaje_rechazado_sin_duplicados": 0.6,
+  "segundos": 4.16
+}

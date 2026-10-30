@@ -1,0 +1,1271 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sesión 1 · Sistemas Big Data | CEU</title>
+    <meta
+      name="description"
+      content="Introducción interactiva a los sistemas Big Data: concepto, ciclo del dato, fuentes, arquitectura y formulación de problemas."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231458CC'/%3E%3Cpath d='M8 9h16v5H8zm0 9h16v5H8z' fill='%2392DBDC'/%3E%3C/svg%3E"
+    />
+    <style>
+      :root {
+        --blue: #1458cc;
+        --navy: #003ca3;
+        --aqua: #92dbdc;
+        --ink: #142b4c;
+        --muted: #526680;
+        --paper: #f2f6fb;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #081c3c;
+        color: var(--ink);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      button,
+      input,
+      textarea {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      textarea:focus-visible {
+        outline: 5px solid var(--aqua);
+        outline-offset: 4px;
+      }
+      #frame {
+        width: 1920px;
+        height: 1080px;
+        transform-origin: top left;
+        background: var(--paper);
+        position: absolute;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      header {
+        height: 105px;
+        background: var(--navy);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 66px;
+      }
+      .brand {
+        font-weight: 800;
+        font-size: 46px;
+        letter-spacing: -2px;
+      }
+      .brand small {
+        font-size: 21px;
+        letter-spacing: 2px;
+        border-left: 1px solid #8cb1eb;
+        margin-left: 25px;
+        padding-left: 25px;
+        font-weight: 400;
+      }
+      .tools {
+        display: flex;
+        gap: 12px;
+      }
+      .tools button {
+        border: 1px solid #7095d4;
+        background: transparent;
+        color: white;
+        padding: 14px 22px;
+        border-radius: 8px;
+        font-size: 20px;
+      }
+      main {
+        flex: 1;
+        min-height: 0;
+        padding: 42px 66px 20px;
+      }
+      section {
+        display: none;
+        height: 100%;
+      }
+      section.active {
+        display: block;
+        animation: appear 0.25s ease-out;
+      }
+      @keyframes appear {
+        from {
+          opacity: 0.3;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .eyebrow {
+        font-size: 20px;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 3px;
+        color: var(--blue);
+        margin: 0 0 14px;
+      }
+      h1 {
+        font-size: 62px;
+        line-height: 1.08;
+        letter-spacing: -2px;
+        margin: 0 0 22px;
+      }
+      h2 {
+        font-size: 31px;
+        margin: 0 0 16px;
+        line-height: 1.2;
+      }
+      h3 {
+        font-size: 26px;
+        margin: 0 0 12px;
+      }
+      p,
+      li {
+        font-size: 27px;
+        line-height: 1.42;
+        margin: 0 0 16px;
+      }
+      .lead {
+        color: var(--muted);
+        font-size: 29px;
+        max-width: 1550px;
+      }
+      .grid {
+        display: grid;
+        gap: 26px;
+        margin-top: 28px;
+      }
+      .two {
+        grid-template-columns: 1fr 1fr;
+      }
+      .three {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .card {
+        background: white;
+        border: 1px solid #d6e0ed;
+        border-radius: 16px;
+        padding: 30px;
+      }
+      .dark {
+        background: var(--navy);
+        color: white;
+        border-color: var(--navy);
+      }
+      .aqua {
+        background: var(--aqua);
+        border-color: var(--aqua);
+      }
+      .num {
+        font-size: 90px;
+        font-weight: 800;
+        line-height: 1;
+        color: var(--blue);
+        margin-bottom: 16px;
+      }
+      .tag {
+        font-size: 19px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+      }
+      .note {
+        padding: 22px 28px;
+        border-left: 7px solid var(--blue);
+        background: #e5edf9;
+        margin-top: 26px;
+        font-size: 25px;
+        line-height: 1.4;
+      }
+      .dark .tag {
+        color: var(--aqua);
+      }
+      .chips {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin: 20px 0;
+      }
+      .chips button,
+      .answer {
+        padding: 16px 23px;
+        background: white;
+        border: 2px solid #c7d5e9;
+        border-radius: 9px;
+        color: var(--navy);
+        font-size: 24px;
+        font-weight: 700;
+      }
+      .chips button[aria-pressed="true"],
+      .answer[aria-pressed="true"] {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: white;
+      }
+      .detail {
+        padding: 34px;
+        border-radius: 16px;
+        background: var(--navy);
+        color: white;
+        min-height: 263px;
+      }
+      .detail h2 {
+        font-size: 38px;
+      }
+      .detail p {
+        font-size: 29px;
+      }
+      .label {
+        color: var(--aqua);
+        font-size: 20px;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+      .cycle {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 12px;
+        margin: 35px 0 25px;
+      }
+      .cycle button {
+        border: 2px solid #c7d5e9;
+        background: white;
+        border-radius: 12px;
+        color: var(--navy);
+        padding: 24px 12px;
+        font-size: 23px;
+        text-align: left;
+      }
+      .cycle button span {
+        display: block;
+        font-size: 42px;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+      .cycle button[aria-pressed="true"] {
+        background: var(--blue);
+        color: white;
+        border-color: var(--blue);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 25px;
+        font-size: 25px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 19px 24px;
+        border-bottom: 1px solid #cedaea;
+        vertical-align: top;
+      }
+      th {
+        color: white;
+        background: var(--navy);
+        font-size: 23px;
+      }
+      td:first-child {
+        font-weight: bold;
+        color: var(--navy);
+        width: 22%;
+      }
+      tbody tr:nth-child(even) {
+        background: #e8eff9;
+      }
+      code,
+      pre {
+        font-family: Consolas, monospace;
+      }
+      pre {
+        font-size: 23px;
+        line-height: 1.4;
+        background: #eaf0f9;
+        padding: 18px;
+        border-radius: 9px;
+        white-space: pre-wrap;
+        margin: 16px 0;
+      }
+      .source-example {
+        height: 160px;
+      }
+      .feedback {
+        font-size: 25px;
+        margin-top: 16px;
+        min-height: 66px;
+        color: var(--navy);
+        line-height: 1.4;
+      }
+      .architecture {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        margin: 23px 0;
+      }
+      .architecture button {
+        background: white;
+        border: 2px solid #c7d5e9;
+        border-radius: 12px;
+        padding: 24px 18px;
+        color: var(--ink);
+        font-size: 23px;
+        text-align: left;
+        min-height: 168px;
+      }
+      .architecture button b {
+        display: block;
+        color: var(--blue);
+        font-size: 28px;
+        margin-bottom: 15px;
+      }
+      .architecture button[aria-pressed="true"] {
+        border-color: var(--blue);
+        background: #dfebff;
+      }
+      .fabric {
+        background: var(--aqua);
+        font-size: 23px;
+        padding: 19px 25px;
+        border-radius: 9px;
+        text-align: center;
+      }
+      .compact p,
+      .compact li {
+        font-size: 25px;
+      }
+      .formgrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 24px;
+      }
+      label {
+        display: block;
+        font-size: 22px;
+        font-weight: bold;
+      }
+      input,
+      textarea {
+        display: block;
+        width: 100%;
+        margin-top: 9px;
+        padding: 15px;
+        border: 2px solid #bdcde3;
+        border-radius: 8px;
+        background: white;
+        font-size: 24px;
+        color: var(--ink);
+      }
+      textarea {
+        height: 92px;
+        resize: none;
+      }
+      .synthesis {
+        margin-top: 22px;
+        background: var(--navy);
+        color: white;
+        border-radius: 12px;
+        padding: 25px;
+        font-size: 26px;
+        line-height: 1.45;
+        min-height: 130px;
+      }
+      .btn {
+        padding: 16px 24px;
+        background: var(--blue);
+        color: white;
+        border: 0;
+        border-radius: 9px;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .reveal {
+        display: none;
+      }
+      .reveal.shown {
+        display: block;
+      }
+      a {
+        color: var(--blue);
+      }
+      footer {
+        height: 80px;
+        padding: 0 66px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        border-top: 1px solid #d2deee;
+      }
+      .nav {
+        flex: 1;
+        display: flex;
+        gap: 9px;
+      }
+      .nav button {
+        border: 0;
+        color: var(--muted);
+        background: transparent;
+        padding: 16px 17px;
+        border-radius: 8px;
+        font-size: 20px;
+      }
+      .nav button[aria-current="page"] {
+        background: #e5efff;
+        color: var(--navy);
+        font-weight: bold;
+      }
+      .pager {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-size: 22px;
+      }
+      .pager button {
+        padding: 12px 18px;
+        border: 1px solid #c5d3e7;
+        background: white;
+        border-radius: 8px;
+        color: var(--navy);
+        font-size: 25px;
+      }
+      .pager button:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 5px;
+        background: var(--blue);
+        transition: width 0.2s;
+      }
+      .helper {
+        font-size: 21px;
+        color: var(--muted);
+      }
+      ul {
+        padding-left: 28px;
+      }
+      .check {
+        margin-top: 24px;
+        padding: 26px;
+        border-radius: 12px;
+        background: #e5edf9;
+      }
+      #notice {
+        position: absolute;
+        right: 60px;
+        top: 115px;
+        font-size: 20px;
+        background: var(--aqua);
+        padding: 16px;
+        display: none;
+        z-index: 3;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation: none !important;
+          transition: none !important;
+        }
+      }
+      @media (max-width: 800px) and (orientation: portrait) {
+        body {
+          background: var(--paper);
+        }
+        #frame {
+          position: relative;
+          width: 100%;
+          height: auto;
+          min-height: 100vh;
+          transform: none !important;
+          overflow: visible;
+        }
+        header {
+          height: auto;
+          padding: 22px;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+        .brand {
+          font-size: 32px;
+        }
+        .brand small {
+          font-size: 14px;
+        }
+        .tools button {
+          font-size: 16px;
+          padding: 10px;
+        }
+        main {
+          padding: 25px 20px;
+        }
+        h1 {
+          font-size: 36px;
+          letter-spacing: -1px;
+        }
+        h2 {
+          font-size: 26px;
+        }
+        p,
+        li,
+        .lead {
+          font-size: 20px;
+        }
+        .grid,
+        .formgrid {
+          grid-template-columns: 1fr;
+        }
+        .card {
+          padding: 22px;
+        }
+        .cycle,
+        .architecture {
+          grid-template-columns: 1fr 1fr;
+        }
+        .cycle button {
+          font-size: 18px;
+          padding: 16px;
+        }
+        .cycle button span {
+          font-size: 26px;
+          margin-bottom: 8px;
+        }
+        .detail {
+          padding: 24px;
+        }
+        .detail h2 {
+          font-size: 28px;
+        }
+        .detail p {
+          font-size: 21px;
+        }
+        table {
+          font-size: 16px;
+        }
+        th,
+        td {
+          padding: 12px 8px;
+        }
+        th {
+          font-size: 16px;
+        }
+        .note,
+        .fabric,
+        .feedback,
+        .synthesis {
+          font-size: 20px;
+        }
+        .compact p,
+        .compact li {
+          font-size: 20px;
+        }
+        footer {
+          height: auto;
+          padding: 16px 20px;
+          flex-wrap: wrap;
+          position: relative;
+        }
+        .nav {
+          flex-wrap: wrap;
+          flex-basis: 100%;
+        }
+        .nav button {
+          font-size: 16px;
+          padding: 10px;
+        }
+        .num {
+          font-size: 60px;
+        }
+        .helper {
+          font-size: 17px;
+        }
+        .source-example {
+          height: auto;
+        }
+        pre {
+          font-size: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="frame">
+      <header>
+        <div class="brand">CEU <small>BIG DATA · SESIÓN 01</small></div>
+      </header>
+      <main>
+        <section class="active" aria-labelledby="t0">
+          <p class="eyebrow">Introducción a los sistemas Big Data</p>
+          <h1 id="t0">Del dato a una decisión<br />que se pueda justificar.</h1>
+          <p class="lead">
+            Una solución Big Data empieza por una pregunta útil y termina en una
+            acción evaluable. Entre ambas, hay datos, personas y una
+            arquitectura.
+          </p>
+          <div class="grid three">
+            <div class="card">
+              <div class="num">01</div>
+              <h2>Comprender</h2>
+              <p>
+                Distinguir Big Data del procesamiento convencional y reconocer
+                cuándo aporta valor.
+              </p>
+            </div>
+            <div class="card">
+              <div class="num">02</div>
+              <h2>Conectar</h2>
+              <p>
+                Recorrer el ciclo del dato y clasificar fuentes según su
+                estructura.
+              </p>
+            </div>
+            <div class="card dark">
+              <div class="num" style="color: var(--aqua)">03</div>
+              <h2>Plantear</h2>
+              <p>
+                Formular un problema y dibujar una solución conceptual con sus
+                requisitos.
+              </p>
+            </div>
+          </div>
+          <div class="note">
+            <b>Pregunta inicial:</b> una tienda tiene muchos datos de ventas.
+            ¿Necesita Big Data para decidir qué productos reponer? ¿Qué
+            información falta para responder?
+          </div>
+          <p class="helper" style="margin-top: 22px">
+            Navega con las pestañas o las teclas ← y →. En proyección, usa F11 y
+            formato 16:9.
+          </p>
+        </section>
+        <section aria-labelledby="t1">
+          <p class="eyebrow">01 · Concepto</p>
+          <h1 id="t1">Big Data: el reto depende del contexto.</h1>
+          <p class="lead">
+            Conjuntos de datos cuyo volumen, velocidad o variedad requieren una
+            arquitectura escalable para almacenarlos, procesarlos y analizarlos
+            con los recursos y plazos disponibles.
+          </p>
+          <div class="grid three">
+            <div class="card">
+              <h2>Volumen</h2>
+              <p>Cuánto dato se genera y conserva.</p>
+              <p class="helper">
+                Ejemplo: años de eventos de navegación de millones de visitas.
+              </p>
+            </div>
+            <div class="card">
+              <h2>Velocidad</h2>
+              <p>A qué ritmo llega y cuánto se puede esperar.</p>
+              <p class="helper">
+                Ejemplo: detectar una transacción sospechosa antes de
+                autorizarla.
+              </p>
+            </div>
+            <div class="card">
+              <h2>Variedad</h2>
+              <p>Cuántos formatos y significados hay que integrar.</p>
+              <p class="helper">
+                Ejemplo: combinar ventas, eventos JSON e imágenes.
+              </p>
+            </div>
+          </div>
+          <div class="grid two">
+            <div class="card aqua">
+              <h2>Veracidad + valor</h2>
+              <p>
+                ¿Los datos son fiables? ¿Su uso mejora una decisión? Son
+                preguntas esenciales, con o sin Big Data.
+              </p>
+            </div>
+            <div class="card dark">
+              <h2>No hay un umbral universal en GB</h2>
+              <p>
+                Importan el coste, la latencia, la complejidad y la capacidad
+                real del sistema.
+              </p>
+            </div>
+          </div>
+          <div class="note">
+            Big Data no equivale a inteligencia artificial, ni exige la nube. Un
+            sistema distribuido reparte almacenamiento o trabajo entre varios
+            nodos.
+          </div>
+        </section>
+        <section aria-labelledby="t2">
+          <p class="eyebrow">02 · Comparación</p>
+          <h1 id="t2">Elegir la complejidad que el problema necesita.</h1>
+          <p class="lead">
+            Ambos enfoques pueden coexistir. Una base de datos relacional
+            también puede ser grande, distribuida y escalable.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Criterio</th>
+                <th>Enfoque convencional típico</th>
+                <th>Enfoque Big Data típico</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Datos</td>
+                <td>Tablas y esquemas estables</td>
+                <td>Múltiples fuentes, formatos y ritmos</td>
+              </tr>
+              <tr>
+                <td>Capacidad</td>
+                <td>Un servidor o pocos sistemas; ampliación vertical</td>
+                <td>Varios nodos; particiones y ampliación horizontal</td>
+              </tr>
+              <tr>
+                <td>Procesamiento</td>
+                <td>
+                  Consultas y tareas que caben en los recursos disponibles
+                </td>
+                <td>Trabajo paralelo por lotes o sobre flujos de eventos</td>
+              </tr>
+              <tr>
+                <td>Operación</td>
+                <td>Menor complejidad en escenarios acotados</td>
+                <td>Coordinación, tolerancia a fallos y observabilidad</td>
+              </tr>
+              <tr>
+                <td>Decisión</td>
+                <td>Preferible si cumple coste y plazo</td>
+                <td>
+                  Justificable si el enfoque anterior no cumple los requisitos
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="grid two">
+            <div class="card compact">
+              <h3>Inventario diario de una tienda</h3>
+              <p>
+                Un CSV y una base de datos pueden bastar si el informe termina
+                antes de abrir.
+              </p>
+            </div>
+            <div class="card compact aqua">
+              <h3>Eventos de miles de tiendas en segundos</h3>
+              <p>
+                La integración y el plazo de respuesta pueden justificar una
+                solución distribuida.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section aria-labelledby="t3">
+          <p class="eyebrow">03 · Ciclo del dato</p>
+          <h1 id="t3">Cada etapa transforma y añade responsabilidad.</h1>
+          <p class="lead">
+            Selecciona una etapa para recorrer un caso de reposición de
+            productos.
+          </p>
+          <div class="cycle" id="cycle"></div>
+          <div class="detail" id="cycleDetail" aria-live="polite"></div>
+          <div class="grid two">
+            <div class="card compact">
+              <h3>Calidad y trazabilidad durante todo el ciclo</h3>
+              <p>
+                Documentar origen, unidades, fechas y transformaciones.
+                Comprobar duplicados, ausencias y retrasos.
+              </p>
+            </div>
+            <div class="card compact aqua">
+              <h3>La decisión alimenta nuevos datos</h3>
+              <p>
+                Después de reponer, medir ventas y roturas de stock. La
+                evaluación puede cambiar la pregunta inicial.
+              </p>
+            </div>
+          </div>
+        </section>
+        <section aria-labelledby="t4">
+          <p class="eyebrow">04 · Fuentes</p>
+          <h1 id="t4">La estructura condiciona cómo extraemos información.</h1>
+          <div class="grid three">
+            <div class="card">
+              <h2>Estructuradas</h2>
+              <p>Campos y relaciones definidos; filas comparables.</p>
+              <pre class="source-example">
+producto | unidades\nA-12     | 8\nB-07     | 3</pre
+              >
+              <p class="helper">
+                Ventas en una tabla SQL o un CSV tabular bien definido.
+              </p>
+            </div>
+            <div class="card">
+              <h2>Semiestructuradas</h2>
+              <p>Claves o etiquetas, con estructuras que pueden variar.</p>
+              <pre class="source-example">
+{ "evento": "compra",\n  "producto": "A-12",\n  "canal": "web" }</pre
+              >
+              <p class="helper">
+                Eventos JSON, documentos XML y registros etiquetados.
+              </p>
+            </div>
+            <div class="card">
+              <h2>No estructuradas</h2>
+              <p>Sin un esquema tabular directo para el contenido principal.</p>
+              <pre class="source-example">
+«No encontraba el\nproducto en la tienda»\n\n[Audio / imagen / vídeo]</pre
+              >
+              <p class="helper">
+                Reseñas, fotografías, llamadas y documentos de texto.
+              </p>
+            </div>
+          </div>
+          <div class="check">
+            <h3>
+              Clasifica: una foto de una estantería con fecha y tienda en sus
+              metadatos.
+            </h3>
+            <div class="chips" id="sourceChoices">
+              <button data-type="0">Estructurada</button
+              ><button data-type="1">Semiestructurada</button
+              ><button data-type="2">No estructurada</button>
+            </div>
+            <div class="feedback" id="sourceFeedback" aria-live="polite">
+              Elige según el contenido principal que quieres analizar.
+            </div>
+          </div>
+          <p class="helper" style="margin-top: 18px">
+            Una fuente puede mezclar tipos: los metadatos se pueden tabular,
+            aunque la imagen siga siendo no estructurada.
+          </p>
+        </section>
+        <section aria-labelledby="t5">
+          <p class="eyebrow">05 · Arquitectura conceptual</p>
+          <h1 id="t5">Funciones primero; herramientas después.</h1>
+          <p class="lead">
+            Modelo didáctico simplificado: selecciona una capa y cambia el
+            requisito de latencia.
+          </p>
+          <div class="chips" id="modes">
+            <button data-mode="batch" aria-pressed="true">
+              Informe diario · lotes</button
+            ><button data-mode="stream" aria-pressed="false">
+              Aviso en segundos · flujo
+            </button>
+          </div>
+          <div class="architecture" id="architecture"></div>
+          <div class="fabric">
+            En todas las capas: gobierno del dato · calidad · seguridad y
+            privacidad · catálogo y linaje · monitorización
+          </div>
+          <div
+            class="detail"
+            id="archDetail"
+            aria-live="polite"
+            style="margin-top: 23px; min-height: 235px"
+          ></div>
+          <p class="helper" style="margin-top: 15px">
+            Flujo de izquierda a derecha; la evaluación de decisiones vuelve a
+            las fuentes. Lotes y flujos pueden coexistir. Distribuir implica
+            particionar, coordinar y recuperarse de fallos.
+          </p>
+        </section>
+        <section aria-labelledby="t6">
+          <p class="eyebrow">06 · Planteamiento de problemas</p>
+          <h1 id="t6">De «queremos usar Big Data» a una pregunta concreta.</h1>
+          <p class="lead">
+            Completa una ficha breve. Los campos generan una formulación para
+            discutir en clase.
+          </p>
+          <div class="formgrid">
+            <label
+              >Decisión y responsable<input
+                id="decision"
+                value="El responsable de compras decide cuánto reponer"
+                maxlength="180" /></label
+            ><label
+              >Pregunta que los datos deben responder<input
+                id="question"
+                value="¿Qué productos tendrán riesgo de rotura mañana?"
+                maxlength="180" /></label
+            ><label
+              >Fuentes y unidad de análisis<input
+                id="sources"
+                value="Ventas y stock; una fila por producto, tienda y día"
+                maxlength="180" /></label
+            ><label
+              >Plazo de respuesta<input
+                id="latency"
+                value="Antes de las 08:00 de cada día"
+                maxlength="180" /></label
+            ><label
+              >Éxito medible<input
+                id="success"
+                value="Reducir roturas sin aumentar el exceso de inventario"
+                maxlength="180" /></label
+            ><label
+              >Restricción o riesgo<input
+                id="risk"
+                value="Datos retrasados y acceso limitado a información sensible"
+                maxlength="180"
+            /></label>
+          </div>
+          <div class="synthesis" id="synthesis" aria-live="polite"></div>
+          <div class="note">
+            Antes de elegir tecnologías: ¿hay datos accesibles y suficientes?
+            ¿Cuál es la referencia actual? ¿Cómo medirás el efecto de la
+            decisión? Una correlación no demuestra causalidad.
+          </div>
+        </section>
+        <section aria-labelledby="t7">
+          <p class="eyebrow">07 · Aplicación y cierre</p>
+          <h1 id="t7">Diseña una solución, defiende tus decisiones.</h1>
+          <div class="grid two">
+            <div class="card dark">
+              <p class="tag">Caso de aula · cadena de tiendas</p>
+              <h2 style="margin-top: 18px">Evitar estanterías vacías</h2>
+              <p>
+                Dispones de ventas tabulares, eventos JSON de comercio
+                electrónico y fotografías de estanterías.
+              </p>
+              <ul>
+                <li>Formula una pregunta y una decisión.</li>
+                <li>Clasifica las fuentes.</li>
+                <li>Dibuja las capas de tu solución.</li>
+                <li>Justifica si necesitas Big Data.</li>
+              </ul>
+              <button
+                class="btn"
+                id="reveal"
+                style="background: var(--aqua); color: var(--navy)"
+                aria-expanded="false"
+              >
+                Mostrar propuesta
+              </button>
+            </div>
+            <div class="card compact">
+              <h2>Una propuesta posible</h2>
+              <div id="proposal" class="reveal">
+                <p>
+                  <b>Pregunta:</b> ¿qué productos y tiendas tendrán riesgo de
+                  rotura mañana?
+                </p>
+                <p>
+                  <b>Flujo:</b> ventas y stock → ingesta diaria → almacenamiento
+                  → integración y estimación → panel → pedido.
+                </p>
+                <p>
+                  <b>Imágenes:</b> incorporar solo si añaden valor; necesitan
+                  extracción de información y validación.
+                </p>
+                <p>
+                  <b>Elección:</b> empezar por una solución convencional;
+                  escalar si las mediciones de carga y plazo lo exigen.
+                </p>
+              </div>
+              <div id="beforeProposal">
+                <p>
+                  Compara tus decisiones con la propuesta cuando termines el
+                  ejercicio.
+                </p>
+                <div class="note">
+                  La solución debe explicar qué dato entra, qué se transforma,
+                  quién decide y cómo se evalúa el resultado.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="grid two" style="margin-top: 23px">
+            <div class="card compact aqua">
+              <h3>Comprobación de salida</h3>
+              <p>
+                ¿Por qué «tener muchos datos» no basta? ¿En qué se diferencian
+                procesamiento y análisis? ¿Dónde se aplica la calidad?
+              </p>
+            </div>
+            <div class="card compact">
+              <h3>Para ampliar · NIST (2019)</h3>
+              <p style="font-size: 22px">
+                <a
+                  href="https://doi.org/10.6028/NIST.SP.1500-1r2"
+                  target="_blank"
+                  rel="noopener"
+                  >Vol. 1 · Definiciones</a
+                >
+                ·
+                <a
+                  href="https://doi.org/10.6028/NIST.SP.1500-6r2"
+                  target="_blank"
+                  rel="noopener"
+                  >Vol. 6 · Arquitectura de referencia</a
+                >
+              </p>
+              <p class="helper">
+                Esquema propio para docencia. Paleta: #1458CC, #003CA3 y
+                #92DBDC. Los enlaces de lectura requieren conexión.
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer>
+        <nav class="nav" aria-label="Contenido de la sesión" id="nav"></nav>
+        <div class="pager">
+          <button id="prev" aria-label="Pantalla anterior">←</button
+          ><span id="count" aria-live="polite">01 / 08</span
+          ><button id="next" aria-label="Pantalla siguiente">→</button>
+        </div>
+      </footer>
+      <div class="bar" id="bar"></div>
+    </div>
+    <script>
+      "use strict";
+      const $ = (id) => document.getElementById(id);
+      const sections = [...document.querySelectorAll("main section")];
+      const titles = [
+        "Inicio",
+        "Big Data",
+        "Comparación",
+        "Ciclo del dato",
+        "Fuentes",
+        "Arquitectura",
+        "Problema",
+        "Cierre",
+      ];
+      let page = 0;
+      function resize() {
+        const portrait = innerWidth <= 800 && innerHeight > innerWidth;
+        if (portrait) {
+          $("frame").style.transform = "none";
+          $("frame").style.left = "0";
+          $("frame").style.top = "0";
+          return;
+        }
+        const scale = Math.min(innerWidth / 1920, innerHeight / 1080);
+        $("frame").style.transform = `scale(${scale})`;
+        $("frame").style.left = (innerWidth - 1920 * scale) / 2 + "px";
+        $("frame").style.top = (innerHeight - 1080 * scale) / 2 + "px";
+      }
+      addEventListener("resize", resize);
+      resize();
+      titles.forEach((title, i) => {
+        const b = document.createElement("button");
+        b.textContent = title;
+        b.onclick = () => go(i);
+        $("nav").append(b);
+      });
+      function go(i) {
+        page = Math.max(0, Math.min(7, i));
+        sections.forEach((s, k) => {
+          s.classList.toggle("active", k === page);
+          s.inert = k !== page;
+        });
+        [...$("nav").children].forEach((b, k) => {
+          if (k === page) b.setAttribute("aria-current", "page");
+          else b.removeAttribute("aria-current");
+        });
+        $("prev").disabled = page === 0;
+        $("next").disabled = page === 7;
+        $("count").textContent = String(page + 1).padStart(2, "0") + " / 08";
+        $("bar").style.width = ((page + 1) / 8) * 100 + "%";
+        if (innerWidth <= 800 && innerHeight > innerWidth) scrollTo(0, 0);
+      }
+      $("prev").onclick = () => go(page - 1);
+      $("next").onclick = () => go(page + 1);
+      addEventListener("keydown", (e) => {
+        if (
+          /INPUT|TEXTAREA|SELECT/.test(e.target.tagName) ||
+          e.ctrlKey ||
+          e.metaKey ||
+          e.altKey
+        )
+          return;
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          go(page + 1);
+        }
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          go(page - 1);
+        }
+      });
+      go(0);
+      const stages = [
+        [
+          "Generación",
+          "Una compra produce un registro de venta.",
+          "Origen: terminal de venta. Cuidar identificadores y marcas de tiempo.",
+        ],
+        [
+          "Adquisición",
+          "Se capturan ventas y niveles de stock.",
+          "Extraer o recibir datos; comprobar permisos, integridad y frecuencia.",
+        ],
+        [
+          "Almacenamiento",
+          "Se conservan datos originales e históricos.",
+          "Definir formatos, acceso, conservación, copias y organización.",
+        ],
+        [
+          "Procesamiento",
+          "Se limpian, integran y agregan ventas por producto y tienda.",
+          "Resolver duplicados, unidades y fechas. Obtener datos utilizables.",
+        ],
+        [
+          "Análisis",
+          "Se estima la demanda y se detecta riesgo de rotura.",
+          "Responder una pregunta con estadística, reglas o modelos; validar resultados.",
+        ],
+        [
+          "Visualización",
+          "Un panel muestra riesgos, tendencias e incertidumbre.",
+          "Representar la información para el responsable; evitar escalas engañosas.",
+        ],
+        [
+          "Decisión",
+          "El responsable fija el pedido y después evalúa su efecto.",
+          "Actuar según plazos y costes; medir roturas y exceso de inventario.",
+        ],
+      ];
+      stages.forEach((s, i) => {
+        const b = document.createElement("button");
+        b.innerHTML = `<span>${String(i + 1).padStart(2, "0")}</span>${s[0]}`;
+        b.onclick = () => stage(i);
+        $("cycle").append(b);
+      });
+      function stage(i) {
+        [...$("cycle").children].forEach((b, k) =>
+          b.setAttribute("aria-pressed", k === i),
+        );
+        $("cycleDetail").innerHTML =
+          `<p class="label">ETAPA ${i + 1} · CASO DE REPOSICIÓN</p><h2>${stages[i][0]}</h2><p>${stages[i][1]}</p><p style="font-size:24px;opacity:.85">${stages[i][2]}</p>`;
+      }
+      stage(0);
+      $("sourceChoices").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        [...$("sourceChoices").children].forEach((x) =>
+          x.setAttribute("aria-pressed", x === b),
+        );
+        $("sourceFeedback").textContent =
+          b.dataset.type === "2"
+            ? "Correcto: la imagen es no estructurada para el análisis de su contenido; la fecha y la tienda sí pueden representarse como campos."
+            : "Revisa qué quieres analizar: el contenido visual no tiene filas y columnas, aunque sus metadatos puedan tener una estructura definida.";
+      });
+      let mode = "batch",
+        layer = 0;
+      const layers = [
+        ["Fuentes", "Ventas · stock · eventos · imágenes"],
+        ["Ingesta", "Captura · validación · transporte"],
+        ["Almacenamiento", "Datos originales · datos preparados"],
+        ["Procesamiento", "Limpieza · integración · análisis"],
+        ["Consumo", "Panel · alerta · decisión"],
+      ];
+      const archTexts = {
+        batch: [
+          [
+            "Recoger datos relacionados con la pregunta.",
+            "Ventas y stock al cierre. Identificar producto, tienda, fecha y unidades.",
+          ],
+          [
+            "Mover los datos en intervalos planificados.",
+            "Carga diaria; detectar ficheros incompletos y registrar qué se ha recibido.",
+          ],
+          [
+            "Guardar históricos y separar originales de preparados.",
+            "Un almacén analítico sirve consultas; un lago de datos conserva formatos diversos. No son obligatorios ambos.",
+          ],
+          [
+            "Transformar y analizar un conjunto acotado de datos.",
+            "Validar, unir ventas y stock, agregar y estimar el riesgo antes de las 08:00.",
+          ],
+          [
+            "Poner el resultado al servicio de una decisión.",
+            "Un panel diario permite revisar el riesgo y aprobar cantidades de reposición.",
+          ],
+        ],
+        stream: [
+          [
+            "Capturar eventos conforme ocurren.",
+            "Cada venta y cambio de stock llega con su hora e identificador.",
+          ],
+          [
+            "Recibir un flujo continuo y gestionar retrasos.",
+            "Una cola o registro de eventos desacopla productores y consumidores; controlar duplicados y capacidad.",
+          ],
+          [
+            "Conservar eventos y un estado consultable.",
+            "Persistir el historial y actualizar las existencias; definir cómo recuperar el estado tras un fallo.",
+          ],
+          [
+            "Actualizar resultados de forma incremental.",
+            "Calcular riesgo con cada evento o ventana temporal; gestionar eventos tardíos y reprocesamiento.",
+          ],
+          [
+            "Avisar con la latencia requerida.",
+            "Una alerta en segundos solicita una revisión; registrar si el aviso produjo una acción útil.",
+          ],
+        ],
+      };
+      layers.forEach((l, i) => {
+        const b = document.createElement("button");
+        b.innerHTML = `<b>${i + 1}. ${l[0]}</b>${l[1]}`;
+        b.onclick = () => {
+          layer = i;
+          arch();
+        };
+        $("architecture").append(b);
+      });
+      function arch() {
+        [...$("architecture").children].forEach((b, i) =>
+          b.setAttribute("aria-pressed", i === layer),
+        );
+        const x = archTexts[mode][layer];
+        $("archDetail").innerHTML =
+          `<p class="label">${mode === "batch" ? "POR LOTES · INFORME DIARIO" : "EN FLUJO · AVISO EN SEGUNDOS"} / ${layers[layer][0].toUpperCase()}</p><h2>${x[0]}</h2><p>${x[1]}</p>`;
+      }
+      $("modes").addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        mode = b.dataset.mode;
+        [...$("modes").children].forEach((x) =>
+          x.setAttribute("aria-pressed", x === b),
+        );
+        arch();
+      });
+      arch();
+      function formulate() {
+        const v = (id) => $(id).value.trim() || "por definir";
+        $("synthesis").textContent =
+          `${v("decision")}. Pregunta: ${v("question")} Datos: ${v("sources")}. Plazo: ${v("latency")}. Éxito: ${v("success")}. Riesgo o restricción: ${v("risk")}.`;
+      }
+      document
+        .querySelectorAll(".formgrid input")
+        .forEach((i) => i.addEventListener("input", formulate));
+      formulate();
+      $("reveal").onclick = () => {
+        const shown = $("proposal").classList.toggle("shown");
+        $("beforeProposal").hidden = shown;
+        $("reveal").setAttribute("aria-expanded", shown);
+        $("reveal").textContent = shown
+          ? "Ocultar propuesta"
+          : "Mostrar propuesta";
+      };
+    </script>
+  </body>
+</html>
