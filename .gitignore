@@ -1,0 +1,25 @@
+﻿# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Credenciales y configuración privada
+.env
+.env.*
+!.env.example
+
+# Sistema operativo
+Thumbs.db
+.DS_Store
+
+# Datos generados por Hadoop
+**/Hadoop-yarn/data/
+**/datanode*/
+**/namenode*/

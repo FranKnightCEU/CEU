@@ -1,0 +1,9 @@
+hdfs fsck /user/input/archivo_prueba.txt -files -blocks -locations
+
+hdfs dfs -rm /user/input/archivo_grande.dat
+
+hdfs dfs -put /tmp/archivo_grande.dat /user/input
+
+dd if=/dev/zero of=/tmp/archivo_grande.dat bs=1M count=200
+
+dd if=/dev/zero bs=1M count=200 2>/dev/null | hdfs dfs -put - /user/input/archivo_grande.dat
