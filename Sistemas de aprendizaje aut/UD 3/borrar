@@ -1,0 +1,65 @@
+name: BladeSongFix
+automation:
+  - type: counter
+    counter:
+      id: 1096
+      typeId: 222216831
+    amount: "1"
+    allowOverflow: false
+    errorBehaviour: warn
+  - type: target
+    target: self
+    effects:
+      - type: ieffect2
+        name: Bladesong- Agility
+        duration: "10"
+        effects:
+          attack_advantage: null
+          to_hit_bonus: null
+          damage_bonus: null
+          magical_damage: null
+          silvered_damage: null
+          resistances: null
+          immunities: null
+          vulnerabilities: null
+          ignored_resistances: null
+          ac_value: null
+          ac_bonus: intelligenceMod
+          max_hp_value: null
+          max_hp_bonus: null
+          save_bonus: null
+          save_adv: null
+          save_dis: null
+          check_bonus: null
+          check_adv:
+            - athletics
+          check_dis: null
+          dc_bonus: null
+        attacks: []
+        buttons: []
+        end: false
+        conc: false
+        desc: Agility. You gain a +5 bonus to your AC, and your Speed increases by 10
+          ft. In addition, you have Advantage on Dex. (Acrobatics) checks.
+        stacking: false
+        save_as: null
+        parent: null
+        target_self: true
+        tick_on_caster: true
+        hidden: null
+      - type: ieffect2
+        name: Concentration Bonus
+        duration: "10"
+        effects: null
+        attacks: []
+        buttons: []
+        end: null
+        conc: null
+        desc: Add {intelligenceMod} to concentration saves.
+        stacking: null
+        save_as: null
+        parent: null
+        target_self: true
+        tick_on_caster: true
+        hidden: null
+_v: 2
